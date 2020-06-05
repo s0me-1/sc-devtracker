@@ -79,11 +79,11 @@ feed_url = https://developertracker.com/star-citizen/rss
 [discord]
 webhook_url = YOUR_WEBHOOK_URL
 embed_color = 16750848
-footer_icon_url = https://avatars2.githubusercontent.com/u/34744917
+footer_icon_url = https://i33.servimg.com/u/f33/11/20/17/41/zer0110.png
 
 [general]
 fetch_delay = 60
-locale = fr_BE
+locale = en_US
 ```
 
 ## Credits
