@@ -68,7 +68,7 @@ Here's a description of what you can put there:
 * `embed_color`: A color for the embed border in discord. Must be in decimal format.
 * `footer_icon_url`: Icon displayed in the footer of the discord embeds.
 * `fetch_delay`: The time in seconds between each refresh of the RSS Feed.
-* `locale`: The locale used to display the published time of each entry. Must follow the `xx_XX` format and must be installed on the host machine.
+* `locale` (Optionnal): The locale used to display the published time of each entry, use the one on the host by default. Must follow the `xx_XX` format and must be installed on the host machine.
 
 This is the content of `config-sample.ini`:
 

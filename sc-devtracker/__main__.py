@@ -11,7 +11,12 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 
 FEED_PARSE_DELAY = int(config['general']['fetch_delay'])
-locale.setlocale(locale.LC_TIME, config['general']['locale'] + ".UTF-8")
+if 'locale' in config['general']:
+    try:
+        # .UTF-8 Needed for Unix Systems
+        locale.setlocale(locale.LC_TIME, config['general']['locale'] + ".UTF-8")
+    except Exception as e:
+        logger.info("Locale: " + str(e) + " - Fallback to OS default...")
 
 mercury = mercury.Mercury(config)
 
