@@ -21,6 +21,7 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 * requests
 * beautifulsoup4
 * six
+* emoji
 
 ## Installation
 
@@ -88,11 +89,12 @@ locale = en_US
 
 ## Credits
 
-* [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/)
-* [Requests](https://requests.readthedocs.io/en/master/)
-* [Jason R. Coombs](https://github.com/jaraco/) for **[configparser](https://github.com/jaraco/configparser/)**
+* [BeautifulSoup 4](https://www.crummy.com/software/BeautifulSoup/).
+* [Requests](https://requests.readthedocs.io/en/master/).
+* [Jason R. Coombs](https://github.com/jaraco/) for **[configparser](https://github.com/jaraco/configparser/)**.
 * [Kurt McKee](https://github.com/kurtmckee) for **[feedparser](https://github.com/kurtmckee/feedparser)**.
-* [Matthew Dapena-Tretter](https://github.com/matthewwithanm/) for **[markdownify](https://github.com/matthewwithanm/python-markdownify)**<sup>[[2]](#footnotes)</sup>
+* [Matthew Dapena-Tretter](https://github.com/matthewwithanm/) for **[markdownify](https://github.com/matthewwithanm/python-markdownify)**<sup>[[2]](#footnotes)</sup>.
+* [Taehoon Kim](https://github.com/carpedm20) & [Kevin Wurster](https://github.com/geowurster) for **[emoji](https://github.com/carpedm20/emoji)**.
 
 ## License
 

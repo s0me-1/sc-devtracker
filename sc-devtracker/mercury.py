@@ -1,12 +1,15 @@
 from urllib.parse import urlparse
 import time
 import logging
+import re
 
 import feedparser
 import requests
+import emoji
 from bs4 import BeautifulSoup
 
 from . import markdownify as md
+from . import emojiconverter
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -22,6 +25,8 @@ class Mercury:
             "robertsspaceindustries.com": "https://i33.servimg.com/u/f33/11/20/17/41/spectr10.png",
             "www.reddit.com": "https://2.bp.blogspot.com/-r3brlD_9eHg/XDz5bERnBMI/AAAAAAAAG2Y/XfivK0eVkiQej2t-xfmlNL6MlSQZkvcEACK4BGAYYCw/s1600/logo%2Breddit.png"
         }
+
+        self.emoji_regex =  re.compile(r":[a-z]+(?:_[a-z]+)*:", re.MULTILINE)
 
         self.feed_last_modified = False
         self.last_entry_id = False
@@ -47,7 +52,8 @@ class Mercury:
         return feed_update.entries[0]
 
     def _generate_discord_json(self, rss_entry):
-        soup = BeautifulSoup(rss_entry.summary, "html.parser")
+        rss_sumary_emoji_converted = self._replace_emoji_shortcodes(rss_entry.summary)
+        soup = BeautifulSoup(rss_sumary_emoji_converted, "html.parser")
 
         # Fix blockquote from Spectrum
         for quoteauthor in soup.find_all('div', {'class': 'quoteauthor'}):
@@ -87,5 +93,18 @@ class Mercury:
 
     def _send_json_to_webhook(self, discord_embed_json):
         response = requests.request("POST", self.DISCORD_WEBHOOK_URL, json=discord_embed_json)
-        logger.info("Response: " + str(response.status_code))
+        logger.info("Discord Response: " + str(response.status_code))
         logger.debug(response.reason + " | " + response.text)
+
+    def _replace_emoji_shortcodes(self, rss_entry_body):
+
+        emojis_shortcodes = set(self.emoji_regex.findall(rss_entry_body))
+        for shortcode in emojis_shortcodes:
+            shortcode_converted = emojiconverter.get_converted_sc(shortcode)
+            if shortcode_converted:
+                rss_entry_body = rss_entry_body.replace(shortcode, shortcode_converted)
+                logger.debug("EmojiConverter: " + shortcode + " -> " + shortcode_converted)
+            else:
+                logger.debug("EmojiConverter: No entry for " + str(shortcode) + ". Skipping...")
+
+        return emoji.emojize(rss_entry_body, use_aliases=True)

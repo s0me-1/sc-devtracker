@@ -26,7 +26,7 @@ def star_runner(sc):
     """
     last_post = mercury._check_last_rss_post()
     if last_post:
-        logger.info("Sending new entry to Discord: " + last_post.title + " [" + urlparse(last_post.link).hostname + "]")
+        logger.info('Sending: "' + last_post.title + '" [' + urlparse(last_post.link).hostname + ']')
         discord_embed = mercury._generate_discord_json(last_post)
         mercury._send_json_to_webhook(discord_embed)
     s.enter(FEED_PARSE_DELAY, 1, star_runner, (sc,))

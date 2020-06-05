@@ -3,3 +3,4 @@ feedparser
 requests
 beautifulsoup4
 six
+emoji
