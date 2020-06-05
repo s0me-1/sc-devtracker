@@ -68,10 +68,16 @@ class Mercury:
             quoteauthor.insert_after(":")
 
         body = md.markdownify(soup.prettify(), bullets="-")
+        body_trimmed = re.sub(r'\n\s*\n', '\n\n', body)
+
+        # Check the conversion result
+        logger.debug(soup.prettify())
+        logger.debug(body_trimmed)
+
         return {
             "embeds": [
                 {
-                    "description": (body[:2044] + '...') if len(body) > 2048 else body,
+                    "description": (body_trimmed[:2044] + '...') if len(body_trimmed) > 2048 else body_trimmed,
                     "color": self.DISCORD_EMBED_COLOR,
                     "footer": {
                         "icon_url": self.DISCORD_EMBED_FOOTER_ICON_URL,
