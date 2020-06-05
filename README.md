@@ -41,27 +41,27 @@ pip install -r requirements.txt
 
 ## Usage
 
-**Any Platform:**
+**Any Platform**
 Once a proper `config.ini` is created, simply run:
 
 ```shell
 python -m sc-devtracker
 ```
 
-**Linux**:
+**Linux**
 Alternatively, you can run:
 
 ```bash
 ./start.sh
 ```
 
-**Windows:**
-WIP
+**Windows**
+Execute `start.bat`
 
 ## Configuration
 
-
 Complete `config-exemple.ini` and then rename it to `config.ini`.
+Here's a description of what you can put there:
 
 * `feed_url`: A valid RSS Feed, defaulted to the one from [developertracker.com](https://developertracker.com/star-citizen/rss).
 * `webhook_url`: A valid url pointing to a discord webhook. This is what you need to complete.
