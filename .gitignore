@@ -1,0 +1,28 @@
+# local config
+config.ini
+
+# dotfiles
+.*
+!.gitignore
+!.mailmap
+
+# compiled python files
+*.py[co]
+__pycache__/
+*.pyc
+
+# emacs backup files
+*~
+
+# VSCode Workspaces
+*.code-workspace
+
+# various virtualenv
+/bin/
+/build/
+/dist/
+/include/
+/lib/
+/man/
+/share/
+/src/

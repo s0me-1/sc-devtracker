@@ -1,0 +1,5 @@
+configparser
+feedparser
+requests
+beautifulsoup4
+six
