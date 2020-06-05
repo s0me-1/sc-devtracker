@@ -12,7 +12,7 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 
 ## Requirements
 
-* Python 3.7[^1]
+* Python 3.7<sup>[[1]](#footnotes)</sup>
 
 **SC-Devtracker** needs the following **python packages** to work properly:
 
@@ -21,9 +21,6 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 * requests
 * beautifulsoup4
 * six
-
-[^1]: **python-feedparser** currently needs to be updated to properly support Python 3.8
-
 
 ## Installation
 
@@ -40,7 +37,7 @@ pip install -r requirements.txt
 ```
 
 * Create a [Discord Webhook](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks&amp?page=3).
-* Complete your `config.ini` file (See [Configuration](https://github.com/s0me-1/sc-devtracker#configuration)).
+* Complete your `config.ini` file (See [Configuration](#configuration)).
 
 ## Usage
 
@@ -95,10 +92,13 @@ locale = fr_BE
 * [Requests](https://requests.readthedocs.io/en/master/)
 * [Jason R. Coombs](https://github.com/jaraco/) for **[configparser](https://github.com/jaraco/configparser/)**
 * [Kurt McKee](https://github.com/kurtmckee) for **[feedparser](https://github.com/kurtmckee/feedparser)**.
-* [Matthew Dapena-Tretter](https://github.com/matthewwithanm/) for **[markdownify](https://github.com/matthewwithanm/python-markdownify)**[^2].
-
-[^2]: The version used in **SC-Devtracker** is an unofficial version that includes a patch for handling blocquotes properly.
+* [Matthew Dapena-Tretter](https://github.com/matthewwithanm/) for **[markdownify](https://github.com/matthewwithanm/python-markdownify)**<sup>[[2]](#footnotes)</sup>
 
 ## License
 
 [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html)
+
+## Footnotes
+
+* <sup>[1]</sup> **python-feedparser** currently needs to be updated to properly support Python 3.8.
+* <sup>[2]</sup> The version used in **SC-Devtracker** is an unofficial version that includes a patch for handling blocquotes properly.
