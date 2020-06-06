@@ -9,7 +9,7 @@ read = lambda filepath: codecs.open(filepath, 'r', 'utf-8').read()
 pkgmeta = {
     '__title__': 'sc-devtracker',
     '__author__': 's0me-1',
-    '__version__': '0.4',
+    '__version__': '0.4.1',
     '__description__': "A Star Citizen RSS/Discord Webhook connector."
 }
 

@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 import locale, sched, time, logging
+import sys
 import configparser
 from . import mercury
 
@@ -9,6 +10,12 @@ logger.setLevel(logging.INFO)
 
 config = configparser.ConfigParser()
 config.read('config.ini')
+
+if not config.sections():
+    logger.critical("No 'config.ini' file detected !")
+    logger.critical("Closing in 5s...")
+    time.sleep(5)
+    sys.exit(0)
 
 # Set delay between fetches
 FEED_PARSE_DELAY = 60

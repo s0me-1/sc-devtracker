@@ -1,7 +1,7 @@
-__version__ = "0.4"
+__version__ = "0.4.1"
 
 from urllib.parse import urlparse
-import time
+import time, sys
 import logging
 import re
 
@@ -126,7 +126,14 @@ class Mercury:
         }
 
     def _send_json_to_webhook(self, discord_embed_json):
-        response = requests.request("POST", self.DISCORD_WEBHOOK_URL, json=discord_embed_json)
+        try:
+            response = requests.request("POST", self.DISCORD_WEBHOOK_URL, json=discord_embed_json)
+        except requests.RequestException as e:
+            logger.critical("Discord Webhook Request failed: " + str(e))
+            logger.critical("Closing in 5s...")
+            time.sleep(5)
+            sys.exit(0)
+
         if response.status_code != 204:
             logger.warning("Discord Response: " +  response.reason + ' (' + str(response.status_code) + ') ' + " | " + response.text)
             if response.status_code == 400:
