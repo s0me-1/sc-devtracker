@@ -67,13 +67,17 @@ class Mercury:
             quoteauthor.insert_after(soup.new_tag("br"))
             quoteauthor.insert_after(":")
 
+        # HTML -> Markdown
         body = md.markdownify(soup.prettify(), bullets="-")
+
+        # Max 2 new lines in a row
         body_trimmed = re.sub(r'\n\s*\n', '\n\n', body)
 
         # Check the conversion result
         logger.debug(soup.prettify())
         logger.debug(body_trimmed)
 
+        # Building final Discord Embed JSON
         return {
             "embeds": [
                 {
