@@ -26,3 +26,6 @@ __pycache__/
 /man/
 /share/
 /src/
+
+# egg-info
+*.egg-info*

@@ -1,3 +1,5 @@
+__version__ = "0.4"
+
 from urllib.parse import urlparse
 import time
 import logging
@@ -103,7 +105,7 @@ class Mercury:
                     "color": self.DISCORD_EMBED_COLOR if self.DISCORD_EMBED_COLOR else self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['dec_color'],
                     "footer": {
                         "icon_url": self.DISCORD_EMBED_FOOTER_ICON_URL,
-                        "text": "SC-Devtracker 0.3" ,
+                        "text": "SC-Devtracker " + __version__ ,
                     },
                     "author": {
                         "name": rss_entry.author,
