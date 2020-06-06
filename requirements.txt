@@ -4,3 +4,5 @@ requests
 beautifulsoup4
 six
 emoji
+dateutil
+pytz

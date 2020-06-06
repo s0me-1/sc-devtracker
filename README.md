@@ -22,6 +22,8 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 * beautifulsoup4
 * six
 * emoji
+* pytz
+* dateutil
 
 ## Installation
 
@@ -47,13 +49,17 @@ pip install -r requirements.txt
 ## Usage
 
 **Any Platform**
+
 Once a proper `config.ini` is created, simply run:
 
 ```shell
 python -m sc-devtracker
 ```
 
+Once properly started, **SC-Devtracker** will fetch and send the most recent entry of the RSS Feed to ensure everything is working as expected.
+
 **Linux**
+
 Alternatively, you can run:
 
 ```bash
@@ -61,6 +67,7 @@ Alternatively, you can run:
 ```
 
 **Windows**
+
 Execute `start.bat`
 
 ## Configuration
@@ -75,6 +82,7 @@ Here's a description of what you can put there:
 * `embed_footer_icon_url`: Icon displayed in the footer of the discord embeds.
 * `fetch_delay` (Optionnal): The time in seconds between each refresh of the RSS Feed. Defaults to **60**.
 * `locale` (Optionnal): The locale used to display the published time of each entry, use the one on the host by default. Must follow the `xx_XX` format and must be installed on the host machine.
+* `timezone` (Optionnal): Desired timezone for published dates. Must be a valid [pytz Timezone](https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568).
 
 This is the content of `config-sample.ini`:
 

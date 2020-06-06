@@ -9,7 +9,14 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+try:
+    config.read('config.ini')
+except:
+    logger.critical("Invalid 'config.ini' file !")
+    logger.critical("Closing in 5s...")
+    time.sleep(5)
+    sys.exit(0)
+
 
 if not config.sections():
     logger.critical("No 'config.ini' file detected !")

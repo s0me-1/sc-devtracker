@@ -9,6 +9,9 @@ import feedparser
 import requests
 import emoji
 from bs4 import BeautifulSoup
+from dateutil import parser
+import pytz
+from tzlocal import get_localzone
 
 from . import markdownify as md
 from . import emojimapper
@@ -30,6 +33,16 @@ class Mercury:
                 logger.warning("Custom Embed Color: Not a decimal color. Ignoring...")
 
         self.DISCORD_EMBED_FOOTER_ICON_URL = str(config['discord']['embed_footer_icon_url']) if 'embed_footer_icon_url' in config['discord'] else False
+
+        self.TIMEZONE = get_localzone()
+        if 'timezone' in config['general'] and config['general']['timezone']:
+            try:
+                self.TIMEZONE = pytz.timezone(str(config['general']['timezone']))
+            except:
+                logger.warning("Invalid Timezone: " + str(config['general']['timezone']) + ". Fallback to the host Timezone...")
+
+        logger.info("Timezone set to: " + str(self.TIMEZONE))
+
 
         self.WEBSITES_SETTINGS = {
             "robertsspaceindustries.com": {
@@ -61,7 +74,7 @@ class Mercury:
         
         # Prevent sending the same entry twice
         if self.last_entry_id == feed_update.entries[0].id:
-            logger.debug("It seems the RSS Feed was modified, but the id of the newest entry hasn't changed.")
+            logger.info("It seems the RSS Feed was modified, but the id of the newest entry hasn't changed. Ignoring...")
             return False
         self.last_entry_id = feed_update.entries[0].id
 
@@ -96,6 +109,10 @@ class Mercury:
             body_trimmed = re.sub(r'\n>\s*\n>\s*\n>\s*\n>', '\n> \n> ', body_trimmed)
         body_trimmed = re.sub(r'\n>\s*\n>\s*\n>', '\n> \n> ', body_trimmed)
 
+        # Parse published date
+        datetime_published = parser.parse(rss_entry.published)
+        datetime_published_tz = datetime_published.astimezone(self.TIMEZONE)
+
         # Building final Discord Embed JSON
         return {
             "content": self.DISCORD_EMBED_TITLE,
@@ -118,7 +135,7 @@ class Mercury:
                         },
                         {
                             "name": "Published",
-                            "value": time.strftime("%e %b %Y %H:%M", rss_entry.published_parsed),
+                            "value": datetime_published_tz.strftime("%e %b %Y %H:%M"),
                         }
                     ]
                 }
