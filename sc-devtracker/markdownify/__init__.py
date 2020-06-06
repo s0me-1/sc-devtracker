@@ -138,9 +138,13 @@ class MarkdownConverter(object):
             line = '=' if n == 1 else '-'
             return self.underline(text, line)
         hashes = '#' * n
-        if style == ATX_CLOSED:
-            return '%s %s %s\n\n' % (hashes, text, hashes)
-        return '%s %s\n\n' % (hashes, text)
+
+        # Unsupported in Discord embeds
+        # 
+        # if style == ATX_CLOSED:
+        #     return '%s %s %s\n\n' % (hashes, text, hashes)
+        # return '%s %s\n\n' % (hashes, text)
+        return '**%s**' % (text)
 
     def convert_i(self, el, text):
         return self.convert_em(el, text)
