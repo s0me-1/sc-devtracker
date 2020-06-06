@@ -2,7 +2,7 @@
 
 A simple **RSS/Discord Webhook connector** written in **Python 3**.
 
-![SC Devracker Discord Embed](https://i.imgur.com/UZM4A71.png)
+![SC Devracker Discord Embed](https://i.imgur.com/eHMlXUP.png)
 
 ## Description
 
