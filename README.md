@@ -25,7 +25,11 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 
 ## Installation
 
-* **Clone** this repository wherever you like:
+* Download the latest [Release](https://github.com/s0me-1/sc-devtracker/releases/).
+
+**or**
+
+* Clone this repository wherever you like (Maybe unstable).
   
 ```shell
 git clone git@github.com:s0me-1/sc-devtracker.git
@@ -87,6 +91,10 @@ footer_icon_url = https://i33.servimg.com/u/f33/11/20/17/41/zer0110.png
 fetch_delay = 60
 locale = en_US
 ```
+
+## Known Bugs
+
+* DOM coming from the RSS source maybe incorrect (Especially with lists), resulting in excessive new line in some lists after parsing.
 
 ## Credits
 
