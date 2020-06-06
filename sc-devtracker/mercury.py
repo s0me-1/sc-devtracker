@@ -19,12 +19,27 @@ class Mercury:
     def __init__(self, config):
         self.RSS_FEED_URL = str(config['rss']['feed_url'])
         self.DISCORD_WEBHOOK_URL = str(config['discord']['webhook_url'])
-        self.DISCORD_EMBED_COLOR = int(config['discord']['embed_color'])
-        self.DISCORD_EMBED_FOOTER_ICON_URL = str(config['discord']['footer_icon_url'])
-        self.ICON_URLS = {
-            "robertsspaceindustries.com": "https://i33.servimg.com/u/f33/11/20/17/41/spectr10.png",
-            "www.reddit.com": "https://2.bp.blogspot.com/-r3brlD_9eHg/XDz5bERnBMI/AAAAAAAAG2Y/XfivK0eVkiQej2t-xfmlNL6MlSQZkvcEACK4BGAYYCw/s1600/logo%2Breddit.png"
+        self.DISCORD_EMBED_TITLE = str(config['discord']['embed_title']) if 'embed_title' in config['discord'] else False
+        self.DISCORD_EMBED_COLOR = False
+        if 'embed_color' in config['discord'] and  config['discord']['embed_color']:
+            try:
+                self.DISCORD_EMBED_COLOR = int(config['discord']['embed_color'])
+            except:
+                logger.warning("Custom Embed Color: Not a decimal color. Ignoring...")
+
+        self.DISCORD_EMBED_FOOTER_ICON_URL = str(config['discord']['embed_footer_icon_url']) if 'embed_footer_icon_url' in config['discord'] else False
+
+        self.WEBSITES_SETTINGS = {
+            "robertsspaceindustries.com": {
+                'icon_url': "https://i33.servimg.com/u/f33/11/20/17/41/spectr10.png",
+                'dec_color': 2674940,
+            },
+            "www.reddit.com": {
+                'icon_url': "https://2.bp.blogspot.com/-r3brlD_9eHg/XDz5bERnBMI/AAAAAAAAG2Y/XfivK0eVkiQej2t-xfmlNL6MlSQZkvcEACK4BGAYYCw/s1600/logo%2Breddit.png",
+                'dec_color': 16729344,
+            }
         }
+
 
         self.emoji_regex =  re.compile(r":[a-z]+(?:_[a-z]+)*:", re.MULTILINE)
 
@@ -49,7 +64,7 @@ class Mercury:
         self.last_entry_id = feed_update.entries[0].id
 
         logger.debug('New entry found: ' + feed_update.entries[0].title)
-        return feed_update.entries[1]
+        return feed_update.entries[0]
 
     def _generate_discord_json(self, rss_entry):
         rss_sumary_emoji_converted = self._replace_emoji_shortcodes(rss_entry.summary)
@@ -79,28 +94,29 @@ class Mercury:
             body_trimmed = re.sub(r'\n>\s*\n>\s*\n>\s*\n>', '\n> \n> ', body_trimmed)
         body_trimmed = re.sub(r'\n>\s*\n>\s*\n>', '\n> \n> ', body_trimmed)
 
-        # Check the conversion result
-        logger.debug(soup.prettify())
-        logger.debug(body_trimmed)
-
         # Building final Discord Embed JSON
         return {
+            "content": self.DISCORD_EMBED_TITLE,
             "embeds": [
                 {
                     "description": (body_trimmed[:2044] + '...') if len(body_trimmed) > 2048 else body_trimmed,
-                    "color": self.DISCORD_EMBED_COLOR,
+                    "color": self.DISCORD_EMBED_COLOR if self.DISCORD_EMBED_COLOR else self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['dec_color'],
                     "footer": {
                         "icon_url": self.DISCORD_EMBED_FOOTER_ICON_URL,
-                        "text": time.strftime("%e %b %Y | %H:%M", rss_entry.published_parsed),
+                        "text": "SC-Devtracker 0.3" ,
                     },
                     "author": {
                         "name": rss_entry.author,
-                        "icon_url": self.ICON_URLS[urlparse(rss_entry.link).hostname]
+                        "icon_url": self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['icon_url']
                     },
                     "fields": [
                         {
-                        "name": "Topic",
-                        "value": "[" + rss_entry.title + "](" + rss_entry.link + ")"
+                            "name": "Topic",
+                            "value": "[" + rss_entry.title + "](" + rss_entry.link + ")"
+                        },
+                        {
+                            "name": "Published",
+                            "value": time.strftime("%e %b %Y %H:%M", rss_entry.published_parsed),
                         }
                     ]
                 }
@@ -109,8 +125,12 @@ class Mercury:
 
     def _send_json_to_webhook(self, discord_embed_json):
         response = requests.request("POST", self.DISCORD_WEBHOOK_URL, json=discord_embed_json)
-        logger.info("Discord Response: " + str(response.status_code))
-        logger.debug(response.reason + " | " + response.text)
+        if response.status_code != 204:
+            logger.warning("Discord Response: " +  response.reason + ' (' + str(response.status_code) + ') ' + " | " + response.text)
+            if response.status_code == 400:
+                logger.error("Mercury: It seems an invalid JSON was sent, check your config.ini file.")
+        else:
+            logger.info("Discord Response: Success (" + str(response.status_code) + ")")
 
     def _replace_emoji_shortcodes(self, rss_entry_body):
 

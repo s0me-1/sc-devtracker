@@ -1,4 +1,4 @@
-# SC-Devtracker
+# Star Citizen Discord Devtracker (SC-Devtracker)
 
 A simple **RSS/Discord Webhook connector** written in **Python 3**.
 
@@ -66,9 +66,10 @@ Here's a description of what you can put there:
 
 * `feed_url`: A valid RSS Feed, defaulted to the one from [developertracker.com](https://developertracker.com/star-citizen/rss).
 * `webhook_url`: A valid url pointing to a discord webhook. This is what you need to complete.
-* `embed_color`: A color for the embed border in discord. Must be in decimal format.
-* `footer_icon_url`: Icon displayed in the footer of the discord embeds.
-* `fetch_delay`: The time in seconds between each refresh of the RSS Feed.
+* `embed_title` (Optionnal): Discord message title displayed each time an embed is sent.
+* `embed_color` (Optionnal): A decimal color for the embed border in discord. Defaults selects a color depending on the source website (Light Blue for Spectrum, Orange for Reddit).
+* `embed_footer_icon_url`: Icon displayed in the footer of the discord embeds.
+* `fetch_delay` (Optionnal): The time in seconds between each refresh of the RSS Feed. Defaults to **60**.
 * `locale` (Optionnal): The locale used to display the published time of each entry, use the one on the host by default. Must follow the `xx_XX` format and must be installed on the host machine.
 
 This is the content of `config-sample.ini`:
