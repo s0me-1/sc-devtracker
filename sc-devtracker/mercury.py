@@ -9,7 +9,7 @@ import emoji
 from bs4 import BeautifulSoup
 
 from . import markdownify as md
-from . import emojiconverter
+from . import emojimapper
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -49,7 +49,7 @@ class Mercury:
         self.last_entry_id = feed_update.entries[0].id
 
         logger.debug('New entry found: ' + feed_update.entries[0].title)
-        return feed_update.entries[0]
+        return feed_update.entries[1]
 
     def _generate_discord_json(self, rss_entry):
         rss_sumary_emoji_converted = self._replace_emoji_shortcodes(rss_entry.summary)
@@ -72,6 +72,12 @@ class Mercury:
 
         # Max 2 new lines in a row
         body_trimmed = re.sub(r'\n\s*\n', '\n\n', body)
+
+        # For blocquotes too
+        # There's probably a simpler way to do this, but I'm too tired to fight with regex :D
+        while re.search(r'\n>\s*\n>\s*\n>\s*\n>', body_trimmed, re.MULTILINE):
+            body_trimmed = re.sub(r'\n>\s*\n>\s*\n>\s*\n>', '\n> \n> ', body_trimmed)
+        body_trimmed = re.sub(r'\n>\s*\n>\s*\n>', '\n> \n> ', body_trimmed)
 
         # Check the conversion result
         logger.debug(soup.prettify())
@@ -109,12 +115,18 @@ class Mercury:
     def _replace_emoji_shortcodes(self, rss_entry_body):
 
         emojis_shortcodes = set(self.emoji_regex.findall(rss_entry_body))
-        for shortcode in emojis_shortcodes:
-            shortcode_converted = emojiconverter.get_converted_sc(shortcode)
+        emojis_shortcodes_to_patch = emojimapper.get_patchable_shortcodes(emojis_shortcodes)
+
+        for shortcode in emojis_shortcodes_to_patch:
+            shortcode_converted = emojimapper.get_valid_shortcode(shortcode)
             if shortcode_converted:
                 rss_entry_body = rss_entry_body.replace(shortcode, shortcode_converted)
                 logger.debug("EmojiConverter: " + shortcode + " -> " + shortcode_converted)
-            else:
-                logger.debug("EmojiConverter: No entry for " + str(shortcode) + ". Skipping...")
 
-        return emoji.emojize(rss_entry_body, use_aliases=True)
+        rss_entry_body_emojized = emoji.emojize(rss_entry_body, use_aliases=True)
+    
+        unsupported_shortcodes = set(self.emoji_regex.findall(rss_entry_body_emojized))
+        if unsupported_shortcodes:
+            logger.warning("Unsupported Emojis detected: " + str(unsupported_shortcodes))
+
+        return rss_entry_body_emojized
