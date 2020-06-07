@@ -61,14 +61,15 @@ Once properly started, **SC-Devtracker** will fetch and send the most recent ent
 
 **Linux**
 
-shell:
+Run in shell:
 ```bash
 ./start.sh
 ```
 
---------------------------------------------------------------------------------
+---
 
-Running as systemd service:
+Run as a systemd service:
+
 Considering your installation is in /opt/sc-devtracker
 
 create a symlink of sc-devtracker.service in /etc/systemd/system/
@@ -86,6 +87,7 @@ enable the service and start it:
 systemctl enable sc-devtracker
 systemctl start sc-devtracker
 ```
+
 
 **Windows**
 
