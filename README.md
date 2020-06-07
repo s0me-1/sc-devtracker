@@ -33,7 +33,7 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 **or**
 
 * Clone this repository wherever you like (Maybe unstable).
-  
+
 ```shell
 git clone git@github.com:s0me-1/sc-devtracker.git
 ```
@@ -61,10 +61,30 @@ Once properly started, **SC-Devtracker** will fetch and send the most recent ent
 
 **Linux**
 
-Alternatively, you can run:
-
+shell:
 ```bash
 ./start.sh
+```
+
+--------------------------------------------------------------------------------
+
+Running as systemd service:
+Considering your installation is in /opt/sc-devtracker
+
+create a symlink of sc-devtracker.service in /etc/systemd/system/
+```bash
+ln -s /opt/sc-devtracker/sc-devtracker.service /etc/systemd/system/
+```
+
+reload systemd:
+```bash
+systemctl daemon-reload
+```
+
+enable the service and start it:
+```bash
+systemctl enable sc-devtracker
+systemctl start sc-devtracker
 ```
 
 **Windows**
