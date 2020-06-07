@@ -24,7 +24,8 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 * six
 * emoji
 * pytz
-* dateutil
+* python-dateutil
+* tzlocale
 
 ## Installation
 
@@ -95,12 +96,15 @@ feed_url = https://developertracker.com/star-citizen/rss
 
 [discord]
 webhook_url = YOUR_WEBHOOK_URL
-embed_color = 16750848
-footer_icon_url = https://i33.servimg.com/u/f33/11/20/17/41/zer0110.png
+embed_title = New post from a SC Dev !
+embed_color =
+embed_footer_icon_url = https://avatars2.githubusercontent.com/u/7307512
+show_timezone =
 
 [general]
-fetch_delay = 60
-locale = en_US
+fetch_delay =
+locale =
+timezone =
 ```
 
 ## Known Bugs
