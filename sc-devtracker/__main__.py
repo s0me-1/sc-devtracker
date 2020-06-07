@@ -10,7 +10,7 @@ logger.setLevel(logging.INFO)
 
 config = configparser.ConfigParser()
 try:
-    config.read('config.ini')
+    config.read('../config.ini')
 except:
     logger.critical("Invalid 'config.ini' file !")
     logger.critical("Closing in 5s...")
