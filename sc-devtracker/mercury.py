@@ -1,4 +1,4 @@
-__version__ = "0.4.2"
+__version__ = "0.4.3"
 
 from urllib.parse import urlparse
 import time, sys
@@ -43,6 +43,9 @@ class Mercury:
 
         logger.info("Timezone set to: " + str(self.TIMEZONE))
 
+        self.DISCORD_EMBED_SHOW_TZ = False
+        if 'show_timezone' in config['discord'] and config['discord']['show_timezone']:
+             self.DISCORD_EMBED_SHOW_TZ = str(config['discord']['show_timezone'].lower()[0]) == 'y'
 
         self.WEBSITES_SETTINGS = {
             "robertsspaceindustries.com": {
@@ -135,7 +138,7 @@ class Mercury:
                         },
                         {
                             "name": "Published",
-                            "value": datetime_published_tz.strftime("%e %b %Y %H:%M"),
+                            "value": datetime_published_tz.strftime("%e %b %Y %H:%M (UTC%z)") if self.DISCORD_EMBED_SHOW_TZ else datetime_published_tz.strftime("%e %b %Y %H:%M")
                         }
                     ]
                 }

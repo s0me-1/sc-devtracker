@@ -81,6 +81,8 @@ Here's a description of what you can put there:
 * `embed_title` (Optionnal): Discord message title displayed each time an embed is sent.
 * `embed_color` (Optionnal): A decimal color for the embed border in discord. Defaults selects a color depending on the source website (Light Blue for Spectrum, Orange for Reddit).
 * `embed_footer_icon_url`: Icon displayed in the footer of the discord embeds.
+* `show_timezone` (Optionnal): If set to Yes, it will show the timezone in UTC Format (See below). Defaults to No.
+  ![Without show_timezone](https://i.imgur.com/kC8IOs0.png) ![With show_timezone](https://i.imgur.com/FbRj0CD.png)
 * `fetch_delay` (Optionnal): The time in seconds between each refresh of the RSS Feed. Defaults to **60**.
 * `locale` (Optionnal): The locale used to display the published time of each entry, use the one on the host by default. Must follow the `xx_XX` format and must be installed on the host machine.
 * `timezone` (Optionnal): Desired timezone for published dates. Must be a valid [pytz Timezone](https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568).
