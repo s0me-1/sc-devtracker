@@ -4,5 +4,6 @@ requests
 beautifulsoup4
 six
 emoji
-dateutil
+python-dateutil
 pytz
+tzlocal
