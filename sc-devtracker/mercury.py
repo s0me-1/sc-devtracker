@@ -77,7 +77,7 @@ class Mercury:
         
         # Prevent sending the same entry twice
         if self.last_entry_id == feed_update.entries[0].id:
-            logger.info("It seems the RSS Feed was modified, but the id of the newest entry hasn't changed. Ignoring...")
+            logger.debug("It seems the RSS Feed was modified, but the id of the newest entry hasn't changed. Ignoring...")
             return False
         self.last_entry_id = feed_update.entries[0].id
 
