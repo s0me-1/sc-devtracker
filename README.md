@@ -2,8 +2,8 @@
 
 A simple **RSS/Discord Webhook connector** written in **Python 3**.
 
-![SC Devtracker Discord Embed Scpectrum](https://i.imgur.com/eHMlXUP.png)
-![SC Devtracker Discord Embed Reddit](https://i.imgur.com/XVgMsbL.png)
+![SC Devtracker Discord Embed Scpectrum](https://i.imgur.com/z7X9vpR.png)
+![SC Devtracker Discord Embed Reddit](https://i.imgur.com/vVeauBE.png)
 
 ## Description
 
