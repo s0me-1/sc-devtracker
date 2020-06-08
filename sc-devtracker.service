@@ -1,0 +1,22 @@
+[Unit]
+Description=Star Citizen Discord Devtracker (SC-Devtracker)
+After=network.target
+
+[Service]
+User=discord
+Type=simple
+Environment=PYTHONPATH=/opt/sc-devtracker
+ExecStart=/usr/bin/python3 -m sc-devtracker
+# Require systemd 236 or newer
+StandardOutput=file:/var/log/sc-devtracker.log
+StandardError=file:/var/log/sc-devtracker.err
+ExecReload=/bin/kill -s HUP $MAINPID
+PIDFile=/run/sc-devtracker.pid
+Restart=always
+PrivateDevices=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target
