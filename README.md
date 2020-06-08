@@ -129,9 +129,14 @@ locale =
 timezone =
 ```
 
+## Future Feature
+
+* Better parsing of the HTML content by getting it directly from the source websites
+
 ## Known Bugs
 
 * DOM coming from the RSS source maybe incorrect (Especially with lists), resulting in excessive new line in some lists after parsing.
+* Code block are not supported by the RSS feed, therefore, they will not show in the discord embed.
 
 ## Credits
 
