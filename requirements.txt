@@ -6,4 +6,4 @@ six
 emoji
 python-dateutil
 pytz
-tzlocale
+tzlocal

@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 import locale, sched, time, logging
-import sys
+import sys, os
 import configparser
 from . import mercury
 
@@ -8,9 +8,10 @@ logging.basicConfig(format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+os.chdir(os.path.dirname(__file__))
 config = configparser.ConfigParser()
 try:
-    config.read('config.ini')
+    config.read('../config.ini')
 except:
     logger.critical("Invalid 'config.ini' file !")
     logger.critical("Closing in 5s...")
@@ -42,7 +43,7 @@ if 'locale' in config['general'] and  config['general']['locale']:
 
 mercury = mercury.Mercury(config)
 
-def star_runner(sc): 
+def star_runner(sc):
     """ Check for new RSS Post every FEED_PARSE_DELAY
     and send the last new entry to the set discord webhook
     """
