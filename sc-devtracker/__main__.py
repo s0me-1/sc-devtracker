@@ -47,11 +47,15 @@ def star_runner(sc):
     """ Check for new RSS Post every FEED_PARSE_DELAY
     and send the last new entry to the set discord webhook
     """
-    last_post = mercury._check_last_rss_post()
-    if last_post:
-        logger.info('Sending: "' + last_post.title + '" [' + urlparse(last_post.link).hostname + ']')
-        discord_embed = mercury._generate_discord_json(last_post)
-        mercury._send_json_to_webhook(discord_embed)
+    new_posts = mercury._get_last_rss_posts()
+    if new_posts:
+        logger.info('Retrieved ' + str(len(new_posts)) + ' post(s) to send.')
+        for post in new_posts:
+            logger.info('Sending: "' + post.title + '" [' + urlparse(post.link).hostname + ']')
+            discord_embed = mercury._generate_discord_json(post)
+            mercury._send_json_to_webhook(discord_embed)
+            # Prevent discord rate limiting
+            time.sleep(2)
     s.enter(FEED_PARSE_DELAY, 1, star_runner, (sc,))
 
 s = sched.scheduler(time.time, time.sleep)

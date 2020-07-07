@@ -65,7 +65,7 @@ class Mercury:
         self.last_entry_id = False
         logger.info('Mercury initialized successfully')
 
-    def _check_last_rss_post(self):
+    def _get_last_rss_posts(self):
         logger.debug("Fetching RSS Feed...")
         feed_update = feedparser.parse(self.RSS_FEED_URL, modified=self.feed_last_modified)
 
@@ -84,10 +84,23 @@ class Mercury:
         if self.last_entry_id == feed_update.entries[0].id:
             logger.debug("It seems the RSS Feed was modified, but the id of the newest entry hasn't changed. Ignoring...")
             return False
-        self.last_entry_id = feed_update.entries[0].id
 
-        logger.debug('New entry found: ' + feed_update.entries[0].title)
-        return feed_update.entries[0]
+        # We only send the latest entry at launch
+        if not self.last_entry_id:
+            self.last_entry_id = feed_update.entries[0].id
+            logger.debug('Initial last entry set to: ' + feed_update.entries[0].title)
+            return [feed_update.entries[0]]
+
+        # The RSS feed seems to be updated every 10 minutes,
+        # so we have to get every entries sent
+        else:
+            new_entries = []
+            # Max 10 entries can be sent at once
+            for i in range(10):
+                entry = feed_update.entries[i]
+                if entry.id != self.last_entry_id:
+                    new_entries.append(entry)
+            return new_entries
 
     def _generate_discord_json(self, rss_entry):
         rss_sumary_emoji_converted = self._replace_emoji_shortcodes(rss_entry.summary)
