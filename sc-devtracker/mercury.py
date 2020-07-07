@@ -8,7 +8,7 @@ import re
 import feedparser
 import requests
 import emoji
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, NavigableString
 from dateutil import parser
 import pytz
 from tzlocal import get_localzone
@@ -69,6 +69,11 @@ class Mercury:
         logger.debug("Fetching RSS Feed...")
         feed_update = feedparser.parse(self.RSS_FEED_URL, modified=self.feed_last_modified)
 
+        # Prevent crash if no feed was parsed for some reasons
+        if not feed_update:
+            logger.debug("RSS Feed parsing failed.")
+            return False
+
         # 304 means no new entries
         if feed_update.status == 304:
             logger.debug("RSS Feed wasnt modified since last check.")
@@ -87,6 +92,7 @@ class Mercury:
     def _generate_discord_json(self, rss_entry):
         rss_sumary_emoji_converted = self._replace_emoji_shortcodes(rss_entry.summary)
         soup = BeautifulSoup(rss_sumary_emoji_converted, "html.parser")
+        nb_char_overflow = len(soup.prettify()) - 2048
 
         # Fix blockquote from Spectrum
         for quoteauthor in soup.find_all('div', {'class': 'quoteauthor'}):
@@ -99,6 +105,41 @@ class Mercury:
             quoteauthor.insert_after(soup.new_tag("br"))
             quoteauthor.insert_after(soup.new_tag("br"))
             quoteauthor.insert_after(":")
+
+        # Ellipsising Blocquotes
+        bqs = soup.find_all('blockquote')
+        if nb_char_overflow > 0:
+            i = 0
+            bqs = soup.find_all('blockquote')
+            nb_char_stripped = 0
+            last_processed_bq = False
+            # We try to remove the less text possible, ellipsising is interrupted as soon as we can
+            while i < len(bqs) and nb_char_overflow > nb_char_stripped:
+                bq = bqs[i]
+                init_bq_size = len(bq.text)
+                bq_ps = bq.findAll('p')
+                if len(bq_ps) > 2:
+                    if (not bq_ps[-1].string and bq_ps[-1].text == '') or bq_ps[-1].text == '[...]':
+                        bq_ps[-1].decompose()
+                        bq_ps = bq.findAll('p')
+                        nb_char_stripped += init_bq_size - len(bq.text)
+                    if bq_ps[-1].string:
+                        bq_ps[-1].string.replace_with('[...]')
+                        nb_char_stripped += init_bq_size - len(bq.text)
+                    last_processed_bq = bq
+                else:
+                    i += 1
+                    continue
+            
+            # Ensure Ellipsis
+            last_p = last_processed_bq.findAll('p')[-1]
+            if last_p.text != '[...]':
+                if last_p.string:
+                    last_p.string.replace_with('[...]')
+                else:
+                    last_p.append(NavigableString('[...]'))
+            
+            logger.debug(str(nb_char_stripped) + ' characters stripped from blockquotes')
 
         # HTML -> Markdown
         body = md.markdownify(soup.prettify(), bullets="-")
@@ -134,11 +175,13 @@ class Mercury:
                     "fields": [
                         {
                             "name": "Topic",
-                            "value": "[" + rss_entry.title + "](" + rss_entry.link + ")"
+                            "value": "[" + rss_entry.title + "](" + rss_entry.link + ")",
+                            "inline": True
                         },
                         {
                             "name": "Published",
-                            "value": datetime_published_tz.strftime("%e %b %Y %H:%M (UTC%z)") if self.DISCORD_EMBED_SHOW_TZ else datetime_published_tz.strftime("%e %b %Y %H:%M")
+                            "value": datetime_published_tz.strftime("%e %b %Y %H:%M (UTC%z)") if self.DISCORD_EMBED_SHOW_TZ else datetime_published_tz.strftime("%e %b %Y %H:%M"),
+                            "inline": True
                         }
                     ]
                 }
