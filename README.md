@@ -71,7 +71,7 @@ Run in shell:
 
 Run as a systemd service:
 
-Considering your installation is in /opt/sc-devtracker
+Considering your installation is in **/opt/sc-devtracker** and the user running this unit is **discord**.
 
 create a symlink of sc-devtracker.service in /etc/systemd/system/
 ```bash
