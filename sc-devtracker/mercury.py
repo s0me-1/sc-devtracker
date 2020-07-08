@@ -145,14 +145,15 @@ class Mercury:
                     continue
             
             # Ensure Ellipsis
-            last_p = last_processed_bq.findAll('p')[-1]
-            if last_p.text != '[...]':
-                if last_p.string:
-                    last_p.string.replace_with('[...]')
-                else:
-                    last_p.append(NavigableString('[...]'))
-            
-            logger.debug(str(nb_char_stripped) + ' characters stripped from blockquotes')
+            if last_processed_bq:
+                last_p = last_processed_bq.findAll('p')[-1]
+                if last_p.text != '[...]':
+                    if last_p.string:
+                        last_p.string.replace_with('[...]')
+                    else:
+                        last_p.append(NavigableString('[...]'))
+                
+                logger.debug(str(nb_char_stripped) + ' characters stripped from blockquotes')
 
         # HTML -> Markdown
         body = md.markdownify(soup.prettify(), bullets="-")
