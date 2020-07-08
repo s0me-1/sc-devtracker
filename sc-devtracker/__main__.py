@@ -26,7 +26,7 @@ if not config.sections():
     sys.exit(0)
 
 # Set delay between fetches
-FEED_PARSE_DELAY = 60
+FEED_PARSE_DELAY = 600
 if 'fetch_delay' in config['general'] and config['general']['fetch_delay']:
     try:
         FEED_PARSE_DELAY = int(config['general']['fetch_delay'])

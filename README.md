@@ -106,7 +106,7 @@ Here's a description of what you can put there:
 * `embed_footer_icon_url`: Icon displayed in the footer of the discord embeds.
 * `show_timezone` (Optionnal): If set to Yes, it will show the timezone in UTC Format (See below). Defaults to No.
   ![Without show_timezone](https://i.imgur.com/kC8IOs0.png) ![With show_timezone](https://i.imgur.com/FbRj0CD.png)
-* `fetch_delay` (Optionnal): The time in seconds between each refresh of the RSS Feed. Defaults to **60**.
+* `fetch_delay` (Optionnal): The time in seconds between each refresh of the RSS Feed. Defaults to **600** as the RSS Feed is only updated every 10 minutes.
 * `locale` (Optionnal): The locale used to display the published time of each entry, use the one on the host by default. Must follow the `xx_XX` format and must be installed on the host machine.
 * `timezone` (Optionnal): Desired timezone for published dates. Must be a valid [pytz Timezone](https://gist.github.com/heyalexej/8bf688fd67d7199be4a1682b3eec7568).
 
