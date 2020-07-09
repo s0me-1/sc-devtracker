@@ -98,7 +98,9 @@ class Mercury:
             # Max 10 entries can be sent at once
             for i in range(10):
                 entry = feed_update.entries[i]
-                if entry.id != self.last_entry_id:
+                if entry.id == self.last_entry_id:
+                    break
+                else:
                     new_entries.append(entry)
 
             # Entries are FIFO
