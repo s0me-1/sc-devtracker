@@ -29,11 +29,7 @@ The [RSS Feed](https://developertracker.com/star-citizen/rss) from [Developer Tr
 
 ## Installation
 
-* Download the latest [Release](https://github.com/s0me-1/sc-devtracker/releases/).
-
-**or**
-
-* Clone this repository wherever you like (Maybe unstable).
+Clone this repository wherever you like (e.g. `/opt/`).
 
 ```shell
 git clone git@github.com:s0me-1/sc-devtracker.git
