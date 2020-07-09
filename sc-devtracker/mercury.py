@@ -1,4 +1,4 @@
-__version__ = "0.5.6"
+__version__ = "0.5.7"
 
 from urllib.parse import urlparse
 import time, sys
@@ -89,7 +89,7 @@ class Mercury:
         if not self.last_entry_id:
             self.last_entry_id = feed_update.entries[0].id
             logger.debug('Initial last entry set to: ' + feed_update.entries[0].title)
-            return [feed_update.entries[2]]
+            return [feed_update.entries[0]]
 
         # The RSS feed seems to be updated every 10 minutes,
         # so we have to get every entries sent
