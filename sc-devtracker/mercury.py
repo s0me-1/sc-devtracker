@@ -1,4 +1,4 @@
-__version__ = "0.5.5"
+__version__ = "0.5.6"
 
 from urllib.parse import urlparse
 import time, sys
@@ -89,7 +89,7 @@ class Mercury:
         if not self.last_entry_id:
             self.last_entry_id = feed_update.entries[0].id
             logger.debug('Initial last entry set to: ' + feed_update.entries[0].title)
-            return [feed_update.entries[0]]
+            return [feed_update.entries[2]]
 
         # The RSS feed seems to be updated every 10 minutes,
         # so we have to get every entries sent
@@ -176,34 +176,45 @@ class Mercury:
         datetime_published = parser.parse(rss_entry.published)
         datetime_published_tz = datetime_published.astimezone(self.TIMEZONE)
 
+        # Building Dicord Embed
+        embed = {
+            "description": (body_trimmed[:2044] + '...') if len(body_trimmed) > 2048 else body_trimmed,
+            "color": self.DISCORD_EMBED_COLOR if self.DISCORD_EMBED_COLOR else self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['dec_color'],
+            "footer": {
+                "icon_url": self.DISCORD_EMBED_FOOTER_ICON_URL,
+                "text": "SC-Devtracker " + __version__ ,
+            },
+            "author": {
+                "name": rss_entry.author,
+                "icon_url": self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['icon_url']
+            },
+            "fields": [
+                {
+                    "name": "Topic",
+                    "value": "[" + rss_entry.title + "](" + rss_entry.link + ")",
+                    "inline": True
+                },
+                {
+                    "name": "Published",
+                    "value": datetime_published_tz.strftime("%e %b %Y %H:%M (UTC%z)") if self.DISCORD_EMBED_SHOW_TZ else datetime_published_tz.strftime("%e %b %Y %H:%M"),
+                    "inline": True
+                }
+            ]
+        }
+
+        # Include image if any
+        img = soup.find('img')
+        if img:
+            embed.update({
+                'image': {"url": img['src']}
+            })
+
+
         # Building final Discord Embed JSON
         return {
             "content": self.DISCORD_EMBED_TITLE,
             "embeds": [
-                {
-                    "description": (body_trimmed[:2044] + '...') if len(body_trimmed) > 2048 else body_trimmed,
-                    "color": self.DISCORD_EMBED_COLOR if self.DISCORD_EMBED_COLOR else self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['dec_color'],
-                    "footer": {
-                        "icon_url": self.DISCORD_EMBED_FOOTER_ICON_URL,
-                        "text": "SC-Devtracker " + __version__ ,
-                    },
-                    "author": {
-                        "name": rss_entry.author,
-                        "icon_url": self.WEBSITES_SETTINGS[urlparse(rss_entry.link).hostname]['icon_url']
-                    },
-                    "fields": [
-                        {
-                            "name": "Topic",
-                            "value": "[" + rss_entry.title + "](" + rss_entry.link + ")",
-                            "inline": True
-                        },
-                        {
-                            "name": "Published",
-                            "value": datetime_published_tz.strftime("%e %b %Y %H:%M (UTC%z)") if self.DISCORD_EMBED_SHOW_TZ else datetime_published_tz.strftime("%e %b %Y %H:%M"),
-                            "inline": True
-                        }
-                    ]
-                }
+                embed
             ]
         }
 
