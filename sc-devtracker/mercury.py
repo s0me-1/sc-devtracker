@@ -1,4 +1,4 @@
-__version__ = "0.5.8"
+__version__ = "0.5.9"
 
 from urllib.parse import urlparse
 import time, sys
@@ -104,7 +104,7 @@ class Mercury:
                     new_entries.append(entry)
 
             # Entries are FIFO
-            self.last_entry_id = new_entries[0]
+            self.last_entry_id = new_entries[0].id
             return new_entries
 
     def _generate_discord_json(self, rss_entry):
