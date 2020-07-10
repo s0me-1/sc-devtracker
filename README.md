@@ -1,4 +1,4 @@
-# Star Citizen Discord Devtracker (SC-Devtracker)
+# Star Citizen Discord Devtracker (SC-Devtracker) (UNSTABLE)
 
 A simple **RSS/Discord Webhook connector** written in **Python 3**.
 
