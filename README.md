@@ -1,4 +1,6 @@
-# Star Citizen Discord Devtracker (SC-Devtracker)
+# Star Citizen Discord Devtracker (SC-Devtracker) [DEPRECATED]
+
+# [REPLACED BY DEVTRACKER-BOT](https://github.com/s0me-1/devtracker-bot)
 
 A simple **RSS/Discord Webhook connector** written in **Python 3**.
 
